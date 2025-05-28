@@ -19,7 +19,7 @@ class TestPet:
             assert response.text == "Pet deleted", "Текст ответа не совпал с ожидаемым"
 
     @allure.title("Попытка обновить несуществующего животного")
-    def test_update_noneexistent_pet(self):
+    def test_update_nonexistent_pet(self):
         with allure.step("Отправка запроса на обновление несущесвующего питомца"):
             payload = {"id": 9999,
                        "name": "Non-existent Pet",
@@ -29,6 +29,19 @@ class TestPet:
 
         with allure.step("Проверка статуса ответа"):
             assert  response.status_code == 404, "Код ответа не совпал с ожидаемым"
+
+        with allure.step("Проверка тестового содержимого ответа"):
+            assert response.text == "Pet not found", "Текст ответа не совпал с ожидаемым"
+
+
+    @allure.title("Попытка получить информацию о несуществующем питомце")
+    def test_get_nonexistent_pet(self):
+        with allure.step("Отправка запроса на получение информации о несущесвующем питомце"):
+
+            response = requests.get(f"{BASE_URL}/pet/9999")
+
+        with allure.step("Проверка статуса ответа"):
+            assert response.status_code == 404, "Код ответа не совпал с ожидаемым"
 
         with allure.step("Проверка тестового содержимого ответа"):
             assert response.text == "Pet not found", "Текст ответа не совпал с ожидаемым"
