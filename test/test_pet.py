@@ -1,0 +1,19 @@
+from http.client import responses
+
+import allure
+import requests
+
+BASE_URL = "http://5.181.109.28:9090/api/v3"
+
+@allure.feature("Pet")
+class TestPet:
+    @allure.title("Попытка удалить несуществующего животного")
+    def test_deleted_nonexistent_pet(self):
+        with allure.step("Отправка запроса на несуществующего животного"):
+            response = requests.delete(url = f"{BASE_URL}/pet/9999")
+            print(response)
+        with allure.step("Проверка статуса ответа"):
+            assert  response.status_code == 200, "Код ответа не совпал с ожидаемым"
+
+        with allure.step("Проверка тестового содержимого ответа"):
+            assert response.text == "Pet deleted", "Текст ответа не совпал с ожидаемым"
