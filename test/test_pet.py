@@ -138,3 +138,24 @@ class TestPet:
         with allure.step("Проверка обновленных параметров полей питомца в ответе"):
             assert response.status_code == 200
             assert response_json['name'] == payload['name'], "имя питомца не совпадает с ожидаемым"
+
+    @allure.title("Удаление питомца по ID")
+    def test_delete_pet_by_id(self, create_pet):
+        with allure.step("Получение ID созданного питомца"):
+            pet_id = create_pet["id"]
+
+        with allure.step("Отправка запроса на получение информации о питомце по ID"):
+            response = requests.get(f"{BASE_URL}/pet/{pet_id}")
+
+        with allure.step("Проверка статуса ответа"):
+            assert response.status_code == 200
+
+        with allure.step("Отправка запроса на удаление питомца по ID"):
+            response = requests.delete(f"{BASE_URL}/pet/{pet_id}")
+
+        with allure.step("Проверка статуса ответа"):
+            assert response.status_code == 200, "Не удалось удалить питомца"
+
+        with allure.step("Попытка отправить запрос на получение информации об удаленном питомце по ID"):
+            response = requests.get(f"{BASE_URL}/pet/{pet_id}")
+            assert response.status_code == 404
