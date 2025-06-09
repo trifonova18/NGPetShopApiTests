@@ -178,6 +178,6 @@ class TestPet:
         with allure.step("Проверка статуса ответа и формата данных"):
             assert (expected_status_code == 200 and isinstance(response.json(), list)) or (
                     expected_status_code == 400 and not isinstance(response.json(), list)
-                ) "проверка"
+                )
 
 
